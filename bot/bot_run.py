@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import yt_dlp
-import os, sqlite3, random, time, shutil
+import os, random, time, shutil
 from mutagen.mp3 import MP3
 import config
 from config import YOUTUBE_DL_OPTIONS as ydl_opts
@@ -19,10 +19,6 @@ def str_list(list_of_obj):
 async def on_ready(): #старт бота
     global my_list
     print(f"Bot {bot.user} is ready")
-    global base, cur 
-    base = sqlite3.connect("BOT.db")
-    cur = base.cursor()
-    if base: print("DataBase connected!")
     
     my_list = os.listdir('./play_list')
     print(type(my_list))
@@ -41,10 +37,6 @@ async def on_member_remove(member): #если кто то покинул сер�
         if ch.name == 'основной':
             await bot.get_channel(ch.id).send(f"{member.mention} покинул сервер!")
 
-@bot.event()
-async def on_message(ctx):
-    pass
-
     
 @bot.command()   
 async def join(ctx): #Войти в канал
@@ -62,6 +54,9 @@ async def join(ctx): #Войти в канал
         print('[EXCEPTION]', e)
         
     if config.DEBUG: print('[END] join')
+
+
+
 
 @bot.command()
 async def add_music(ctx, url: str):#Добавить музыку в плейлист
